@@ -7,5 +7,9 @@ import { NextResponse } from "next/server";
 import { ROOM } from "../../../../app/server/lobby"
 
 export async function GET() {
+
+    // DEBUG
+    console.log("STATE: returning room", ROOM);
+
     return NextResponse.json(ROOM);
 }

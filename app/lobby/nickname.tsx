@@ -1,15 +1,29 @@
-// nickname input
+// nickname input (client-side component)
 'use client';
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function NicknameInput() {
     const [ nickname, setNickname ] = useState("");
     const [ error, setError ] = useState<string | null>(null);
     const [ success, setSuccess ] = useState<string | null>(null);
+    const router = useRouter();
+
+    /* LOCAL STORAGE USER ID LOGIC */
+
+    // check if browser has a userID
+    let userID = localStorage.getItem('userID');
+
+    // if this browser doesn't have a userID, generate one
+    if (userID == null) {
+        const generateID = crypto.randomUUID();
+        localStorage.setItem('userID', generateID);
+    }
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
+        const joinedAt = new Date().toISOString();
 
         const res = await fetch('/api/lobby/join', {
             method: 'POST',
@@ -18,6 +32,8 @@ export default function NicknameInput() {
             },
             body: JSON.stringify({
                 nickname: nickname,
+                userID: userID,
+                joinedAt: joinedAt,
             }),
         });
 
@@ -25,10 +41,17 @@ export default function NicknameInput() {
             //handle error
             const { error } = await res.json();
             setError(error)
+            setSuccess(null);
+            setNickname("");
             return;
         } 
         
         setSuccess(`Welcome ${nickname}!`);
+        setNickname("");
+        setError(null);
+        
+        // Refresh the server component to show updated user list
+        router.refresh();
     }
 
     return (

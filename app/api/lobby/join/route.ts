@@ -14,9 +14,21 @@ import { ROOM } from "../../../../app/server/lobby"
 //     "nickname": "Chris"
 // }
 
+// When a join request comes in, the server:
+// 1. Looks at the room’s user list.
+// 2. Searches for an existing user with the same userId.
+// * If found, it updates that user’s nickname.
+// * If not found, it creates a new user entry with that userId.
+
 export async function POST(request: Request) {
-    const body = await request.json()
-    const { nickname } = body;
+    const body = await request.json() 
+
+    let nickname = body.nickname;
+    let userID = body.userID;
+    let joinedAt = body.joinedAt;
+
+    // canonicalize username
+    nickname = nickname.toLowerCase();
 
     // nickname empty
     if (nickname == "") {
@@ -39,25 +51,34 @@ export async function POST(request: Request) {
             {status: 400}
         );
     }
+    
+    if (userID) {
+        // If user already exists with the same userID, update the user's nickname
+        if (ROOM.users.some(user => user.userId === userID)) {
+            const existing = ROOM.users.find(u => u.userId === userID);
+            if (existing) {
+                existing.nickname = nickname;
+            }
+        } else { // If userID hasn't created a nickname, create a new User.
+            // if this is first user, hostUserId becomes their userId
+            if (ROOM.users.length == 0) {
+                ROOM.hostUserId = userID;
+            }
 
-    // generates unique user ID and creates new joinedAt date
-    const userId = crypto.randomUUID();
-    const joinedAt = new Date().toISOString();    
+            // creates a new user
+            const newUser: User = {
+                nickname: nickname,
+                userId: userID,
+                joinedAt: joinedAt
+            };
 
-    // if this is first user, hostUserId becomes their userId
-    if (ROOM.users.length == 0) {
-        ROOM.hostUserId = userId;
+            // appends the user to the current room
+            ROOM.users.push(newUser);
+        }
     }
 
-    // creates a new user
-    const newUser: User = {
-        nickname: nickname,
-        userId: userId,
-        joinedAt: joinedAt
-    };
-
-    // appends the user to the current room
-    ROOM.users.push(newUser)
+    // DEBUG
+    console.log("JOIN: saved room", ROOM);
 
     return NextResponse.json(ROOM, {status: 200});
 }

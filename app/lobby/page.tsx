@@ -1,7 +1,9 @@
-import type { LobbyRoomState } from "../types"
+// nickname validation & updating (server-side component)
+import type { RoomState } from "../types"
 import NicknameInput from "./nickname";
 
 export default async function LobbyPage() {
+
     // server components are allowed to await at the top level
     const res = await fetch('http://localhost:3000/api/lobby/state', { cache: 'no-store' });
 
@@ -9,7 +11,7 @@ export default async function LobbyPage() {
         throw new Error("Failed to fetch lobby state");
     }
 
-    const room: LobbyRoomState = await res.json()
+    const room: RoomState = await res.json()
 
     // render user list (empty at first) & host label
     function UserList() {
@@ -38,9 +40,17 @@ export default async function LobbyPage() {
         );
     }
 
+    // render lobby phase
+    function LobbyPhase() {
+        return (
+            <p>Phase: {room.phase}</p>
+        );
+    }
+
     return (
         <div>
             <RoomCode />
+            <LobbyPhase />
             <NicknameInput />
             <UserList />
         </div>
