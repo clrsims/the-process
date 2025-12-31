@@ -3,7 +3,7 @@ type Phase = typeof PHASE_TYPES[number];
 
 export interface User {
   nickname: string;
-  userId: string | null;
+  userId: string;
   joinedAt: string; // will be an ISO string
 }
   

@@ -9,11 +9,6 @@ import { ROOM } from "../../../../app/server/lobby"
 // 4. If this is first user hostUserId becomes their userId
 // 5. hostUserId must always refer to a real user (or its null)
 
-// request looks something like this: 
-// {
-//     "nickname": "Chris"
-// }
-
 // When a join request comes in, the server:
 // 1. Looks at the room’s user list.
 // 2. Searches for an existing user with the same userId.
