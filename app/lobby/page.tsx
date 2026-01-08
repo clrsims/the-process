@@ -1,6 +1,7 @@
 // nickname validation & updating (server-side component)
 import type { RoomState } from "../types"
 import NicknameInput from "./nickname";
+import StartButton from "./start";
 
 export default async function LobbyPage() {
 
@@ -47,49 +48,13 @@ export default async function LobbyPage() {
         );
     }
 
-    let userID = localStorage.getItem('userID');
-
-    // render start button
-    if (room.hostUserId === userID && room.phase === "LOBBY") {
-        function StartButton() {
-            
-            async function handleClick (){
-
-                // LEFT OFF: need state variables for error and success messages
-                // finish StartButton UI and verify it works
-
-                const res = await fetch('/api/lobby/start', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        userID: userID
-                    }),
-                });
-
-                if (!res.ok) {
-                    //handle error
-                const { error } = await res.json();
-                return;
-                }
-            }
-
-            return (
-                <button onClick={handleClick}>
-                    Start the Process!
-                </button>
-                
-            );
-        } 
-    }
-
     return (
         <div>
             <RoomCode />
             <LobbyPhase />
             <NicknameInput />
             <UserList />
+            <StartButton />
         </div>
     );
 }

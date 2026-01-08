@@ -22,9 +22,6 @@ export async function POST(request: Request) {
     let userID = body.userID;
     let joinedAt = body.joinedAt;
 
-    // canonicalize username
-    nickname = nickname.toLowerCase();
-
     // nickname empty
     if (nickname == "") {
         return NextResponse.json(
