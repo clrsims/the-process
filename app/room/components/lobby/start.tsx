@@ -38,7 +38,7 @@ export default function StartButton({
     return (
         <div>
             <button onClick={handleClick} disabled={!canStart}>
-                Start the Process!
+                Start the Process! (Only host can start)
             </button>
 
             {error && (

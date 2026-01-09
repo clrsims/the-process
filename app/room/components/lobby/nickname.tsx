@@ -15,6 +15,7 @@ export default function NicknameInput() {
    
 
     async function handleSubmit(e: React.FormEvent) {
+        e.preventDefault();
 
         // HARD INVARIANT: never send a request without a userID
         if (!userID) {
