@@ -3,33 +3,16 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import useUserID from "../userid";
 
 export default function NicknameInput() {
     const [ nickname, setNickname ] = useState("");
     const [ error, setError ] = useState<string | null>(null);
     const [ success, setSuccess ] = useState<string | null>(null);
-    const [ userID, setUserID ] = useState<string | null>(null);
     const router = useRouter();
+
+    const userID = useUserID();
    
-    /* LOCAL STORAGE USER ID LOGIC */
-
-    // We use useEffect because accessing or mutating localStorage is a side effect.
-    // React component render functions must be pure, especially because they may
-    // run on the server and during hydration. useEffect ensures this logic only
-    // runs in the browser after the component mounts.
-
-    useEffect(() => {
-        // check if browser has a userID
-        let id = localStorage.getItem('userID');
-
-        // if this browser doesn't have a userID, generate one
-        if (!id) {
-            id = crypto.randomUUID();
-            localStorage.setItem('userID', id);
-        }
-
-        setUserID(id);
-    }, []);
 
     async function handleSubmit(e: React.FormEvent) {
 
