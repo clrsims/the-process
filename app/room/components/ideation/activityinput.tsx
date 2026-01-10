@@ -34,7 +34,7 @@ export default function ActivityInput() {
             return;
         }
 
-        setSuccess('Submitted!');
+        setSuccess(` \'${activity}\' submitted!`);
         setActivity("");
         setError(null);
 

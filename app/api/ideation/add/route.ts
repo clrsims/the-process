@@ -10,17 +10,17 @@ export async function POST(request: Request) {
     const createdAt = new Date().toISOString();
     const activityID = crypto.randomUUID();
 
-    if (activityName = "") { // activity empty
+    if (activityName.trim() === "") { // activity empty
         return NextResponse.json(
             {error: "No activity entered, please try again."},
             {status: 400}
         );
-    } else if (activityName.length > 30) { // activity must be less than 30 characters
+    } else if (activityName.length > 80) { // activity must be less than 80 characters
         return NextResponse.json(
             {error: "Activity must be 30 characters or less, please try again."},
             {status: 400}
         );
-    } else if (ROOM.activities.some(activity => activity.name === activityName)) {
+    } else if (ROOM.activities.some(activity => activity.name.toLowerCase().trim() === activityName.toLowerCase().trim())) {
         return NextResponse.json( // activity not unique
             {error: "Activity is not unique, please try again."},
             {status: 400}

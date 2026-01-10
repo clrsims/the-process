@@ -4,6 +4,7 @@ import NicknameInput from "./components/lobby/nickname";
 import StartButton from "./components/lobby/start";
 import UserList from "./components/lobby/userlist";
 import ActivityInput from "./components/ideation/activityinput";
+import ActivityList from "./components/ideation/activitylist";
 
 export default async function RoomPage() {
 
@@ -55,6 +56,10 @@ export default async function RoomPage() {
             <div>
                 <RoomCode />
                 <RoomPhase />
+                <ActivityInput />
+                <ActivityList 
+                    activities={room.activities}
+                />
             </div>
         );
     }
