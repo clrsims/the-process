@@ -18,6 +18,7 @@ export const ROOM =
     roomCode: "6RUJ72",
     phase: "LOBBY",
     users: [],
+    activities: [],
     hostUserId: null,
     phaseMeta: {
       endsAt: undefined

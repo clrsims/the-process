@@ -1,57 +1,44 @@
-// nickname input (client-side component)
 'use client';
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import useUserID from "../userid";
 
-export default function NicknameInput() {
-    const [ nickname, setNickname ] = useState("");
+export default function ActivityInput() {
+    const [ activity, setActivity ] = useState("");
     const [ error, setError ] = useState<string | null>(null);
     const [ success, setSuccess ] = useState<string | null>(null);
     const router = useRouter();
 
     const userID = useUserID();
-   
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
 
-        // HARD INVARIANT: never send a request without a userID
-        if (!userID) {
-            setError("Initializing your session. Please try again in a moment.");
-            return;
-        }
-
-        e.preventDefault();
-        const joinedAt = new Date().toISOString();
-
-        const res = await fetch('/api/lobby/join', {
+        const res = await fetch('/api/ideation/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                nickname: nickname,
+                activity: activity,
                 userID: userID,
-                joinedAt: joinedAt,
             }),
         });
 
-        if (!res.ok) {
-            //handle error
+        if (!res.ok) { // error handling & display
             const { error } = await res.json();
             setError(error);
             setSuccess(null);
-            setNickname("");
+            setActivity("");
             return;
-        } 
-        
-        setSuccess(`Welcome ${nickname}!`);
-        setNickname("");
+        }
+
+        setSuccess('Submitted!');
+        setActivity("");
         setError(null);
-        
-        // Refresh the server component to show updated user list
+
+        // refresh server component to show updated activity list
         router.refresh();
     }
 
@@ -59,8 +46,8 @@ export default function NicknameInput() {
         <form onSubmit = {handleSubmit}>
             <input
                 type = "text"
-                value = {nickname}
-                onChange = {(e) => setNickname(e.target.value)}
+                value = {activity}
+                onChange = {(e) => setActivity(e.target.value)}
             />
 
             {error && (
@@ -75,7 +62,7 @@ export default function NicknameInput() {
                 </p>
             )}
 
-            <button type="submit" disabled={!userID}>Join</button>
+            <button type="submit">Submit</button>
         </form>
     );
 }

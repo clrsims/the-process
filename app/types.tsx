@@ -6,11 +6,19 @@ export interface User {
   userId: string;
   joinedAt: string; // will be an ISO string
 }
+
+export interface Activity {
+  id: string;
+  name: string;
+  createdByUserID: string;
+  createdAt: string;
+}
   
 export interface RoomState {
   readonly roomCode: string;
   phase: Phase;
   users: User[]; // a room can exist before anyone joins
+  activities: Activity[];
   hostUserId: string | null;
   phaseMeta: {
     endsAt?: string;

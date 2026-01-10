@@ -3,6 +3,7 @@ import type { RoomState } from "../types"
 import NicknameInput from "./components/lobby/nickname";
 import StartButton from "./components/lobby/start";
 import UserList from "./components/lobby/userlist";
+import ActivityInput from "./components/ideation/activityinput";
 
 export default async function RoomPage() {
 
